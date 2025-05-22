@@ -8,6 +8,7 @@ class TimeStamped(models.Model):
         abstract = True
 
 class Apartment(TimeStamped):
+    id = models.IntegerField(primary_key=True)
     title = models.CharField(max_length=150,blank=False)
     price = models.IntegerField(blank=False)
     rooms = models.IntegerField(blank=False)
@@ -21,3 +22,5 @@ class Apartment(TimeStamped):
     class Meta():
         db_table = "apartment"
 
+    def __str__(self):
+        return f" Aparment {id}"
