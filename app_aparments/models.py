@@ -8,7 +8,7 @@ class TimeStamped(models.Model):
         abstract = True
 
 class Apartment(TimeStamped):
-    id = models.IntegerField(primary_key=True)
+    id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=150,blank=False)
     price = models.IntegerField(blank=False)
     rooms = models.IntegerField(blank=False)
@@ -16,7 +16,7 @@ class Apartment(TimeStamped):
     address = models.CharField(max_length=100,blank=False)
     location = models.CharField(max_length=50,blank=False)
     square_meters = models.FloatField(blank=False)
-    images = models.ImageField(blank=False)
+    images = models.URLField(max_length=350,blank=False)
     description = models.CharField(max_length=300,blank=False)
 
     class Meta():
