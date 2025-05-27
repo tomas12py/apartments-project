@@ -1,3 +1,4 @@
+from .validators import number_greater_than_zero
 from django.db import models
 
 class TimeStamped(models.Model):
@@ -10,7 +11,7 @@ class TimeStamped(models.Model):
 class Apartment(TimeStamped):
     id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=150,blank=False)
-    price = models.IntegerField(blank=False)
+    price = models.IntegerField(blank=False,validators=[number_greater_than_zero])
     rooms = models.IntegerField(blank=False)
     bathrooms = models.IntegerField(blank=False)
     address = models.CharField(max_length=100,blank=False)
