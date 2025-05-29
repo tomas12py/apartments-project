@@ -1,4 +1,5 @@
-from .serializer import ApartmentSerializer
+from rest_framework.permissions import IsAuthenticated
+from .serializer import ApartmentSerializer,UserRegistrationSerializer
 from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -6,6 +7,9 @@ from rest_framework import status
 from .models import Apartment
 
 class AparmentMethodsById(APIView):
+
+    permission_classes = [IsAuthenticated]
+
     def get(self,request,id):
         aparment = get_object_or_404(Apartment,pk = id)
         serializer = ApartmentSerializer(aparment)
@@ -35,11 +39,17 @@ class AparmentGeneralMethods(APIView):
     def post(self,request):
         serializer = ApartmentSerializer(data = request.data)
         if serializer.is_valid():
-            serializer.validated_data["title"] = serializer.validated_data["title"].capitalize()
             serializer.save()
             return Response("The aparment was created",status = status.HTTP_201_CREATED)
         return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
     
     
+class UserRegister(APIView):
 
-    
+    def post(self,request):
+        serializer = UserRegistrationSerializer(data = request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response("User has been created",status=status.HTTP_201_CREATED)
+
+        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
