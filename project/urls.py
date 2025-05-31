@@ -26,6 +26,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path("aparment",AparmentGeneralMethods.as_view()),
     path("aparment/<int:id>/",AparmentMethodsById.as_view()),
-    path("register/",UserRegister.as_view()),
+    path("user/",UserRegister.as_view()),
+    path("user/<int:id>/",UserRegister.as_view()),
     path("login/",TokenObtainPairView.as_view())
 ]
