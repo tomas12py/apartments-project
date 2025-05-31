@@ -1,4 +1,5 @@
 from rest_framework.permissions import IsAuthenticated
+from django.contrib.auth.models import User
 from .serializer import ApartmentSerializer,UserRegistrationSerializer
 from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
@@ -52,4 +53,17 @@ class UserRegister(APIView):
             serializer.save()
             return Response("User has been created",status=status.HTTP_201_CREATED)
 
+        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+    
+    def get(self,request):
+        users  = User.objects.all()
+        serializer = UserRegistrationSerializer(users,many = True)
+        return Response(serializer.data,status=status.HTTP_200_OK)
+    
+    def put(self,request,id):
+        user = get_object_or_404(User,pk = id)
+        serializer = UserRegistrationSerializer(user,data = request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response("The user was updated",status=status.HTTP_201_CREATED)
         return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
