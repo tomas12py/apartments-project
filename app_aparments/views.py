@@ -1,7 +1,8 @@
-from rest_framework.permissions import IsAuthenticated
-from django.contrib.auth.models import User
 from .serializer import ApartmentSerializer,UserRegistrationSerializer
+from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404
+from django.contrib.auth.models import User
+from app_aparments.utils import validate_id
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
@@ -12,12 +13,18 @@ class AparmentMethodsById(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self,request,id):
-        aparment = get_object_or_404(Apartment,pk = id)
+        validated_id,error = validate_id(id)
+        if error:
+            return error
+        aparment = get_object_or_404(Apartment,pk = validated_id)
         serializer = ApartmentSerializer(aparment)
-        return Response(serializer.data)
+        return Response(serializer.data,status=status.HTTP_200_OK)
     
     def put(self,request,id):
-        aparment = get_object_or_404(Apartment,pk = id)
+        validated_id,error = validate_id(id)
+        if error:
+            return error
+        aparment = get_object_or_404(Apartment,pk = validated_id)
         serializer = ApartmentSerializer(aparment,data = request.data)
         if serializer.is_valid():
             serializer.save()
@@ -25,7 +32,10 @@ class AparmentMethodsById(APIView):
         return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
     
     def delete(self,request,id):
-        apartment = get_object_or_404(Apartment,pk = id)
+        validated_id,error = validate_id(id)
+        if error:
+            return error
+        apartment = get_object_or_404(Apartment,pk = validated_id)
         apartment.delete()
         return Response("The aparment was eliminated",status=status.HTTP_204_NO_CONTENT)
 
@@ -61,9 +71,20 @@ class UserRegister(APIView):
         return Response(serializer.data,status=status.HTTP_200_OK)
     
     def put(self,request,id):
-        user = get_object_or_404(User,pk = id)
+        validated_id,error = validate_id(id)
+        if error:
+            return error
+        user = get_object_or_404(User,pk = validated_id)
         serializer = UserRegistrationSerializer(user,data = request.data)
         if serializer.is_valid():
             serializer.save()
             return Response("The user was updated",status=status.HTTP_201_CREATED)
         return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+    
+    def delete(self,request,id):
+        validated_id,error = validate_id(id)
+        if error:
+            return error
+        user = get_object_or_404(User,pk = validated_id)
+        user.delete()
+        return Response("The user was eliminated",status= status.HTTP_204_NO_CONTENT)
