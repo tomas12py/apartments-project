@@ -28,7 +28,7 @@ class AparmentMethodsById(APIView):
         serializer = ApartmentSerializer(aparment,data = request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response("The aparment was modified",status=status.HTTP_200_OK)
+            return Response({"message":"The aparment was modified"},status=status.HTTP_200_OK)
         return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
     
     def delete(self,request,id):
@@ -37,7 +37,7 @@ class AparmentMethodsById(APIView):
             return error
         apartment = get_object_or_404(Apartment,pk = validated_id)
         apartment.delete()
-        return Response("The aparment was eliminated",status=status.HTTP_204_NO_CONTENT)
+        return Response({"message":"The aparment was eliminated"},status=status.HTTP_204_NO_CONTENT)
 
     
     
@@ -51,7 +51,7 @@ class AparmentGeneralMethods(APIView):
         serializer = ApartmentSerializer(data = request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response("The aparment was created",status = status.HTTP_201_CREATED)
+            return Response({"message":"The aparment was created"},status = status.HTTP_201_CREATED)
         return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
     
     
@@ -61,7 +61,7 @@ class UserRegister(APIView):
         serializer = UserRegistrationSerializer(data = request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response("User has been created",status=status.HTTP_201_CREATED)
+            return Response({"message":"User has been created"},status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
     
@@ -78,7 +78,7 @@ class UserRegister(APIView):
         serializer = UserRegistrationSerializer(user,data = request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response("The user was updated",status=status.HTTP_201_CREATED)
+            return Response({"message":"The user was updated"},status=status.HTTP_201_CREATED)
         return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
     
     def delete(self,request,id):
@@ -87,4 +87,4 @@ class UserRegister(APIView):
             return error
         user = get_object_or_404(User,pk = validated_id)
         user.delete()
-        return Response("The user was eliminated",status= status.HTTP_204_NO_CONTENT)
+        return Response({"message":"The user was eliminated"},status= status.HTTP_204_NO_CONTENT)
