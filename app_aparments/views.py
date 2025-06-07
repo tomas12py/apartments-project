@@ -2,6 +2,7 @@ from .serializer import ApartmentSerializer,UserRegistrationSerializer
 from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
+from drf_spectacular.utils import extend_schema,OpenApiExample
 from app_aparments.utils import validate_id
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -42,11 +43,80 @@ class AparmentMethodsById(APIView):
     
     
 class AparmentGeneralMethods(APIView):
+
+    @extend_schema(
+        summary = "Get all aparments",
+        description = "Get each aparment",
+        responses = {200: ApartmentSerializer,400:"ErrorSerializer"},
+        examples = [
+            OpenApiExample(
+                "All aparments",
+                summary = "Response for get each aparment",
+                description = "This example shows how to get all aparments",
+                value = {
+                    "id": 13,
+                    "created_at": "2025-05-28T03:55:15.493777Z",
+                    "updated_at": "2025-05-28T03:55:15.494313Z",
+                    "title": "Seven aparment",
+                    "price": 100,
+                    "rooms": 2,
+                    "bathrooms": 0,
+                    "address": "hola",
+                    "location": "0",
+                    "square_meters": 50.75,
+                    "images": "https://www.notion",
+                    "description": "Aparment for sell"
+                }
+            ),
+            OpenApiExample(
+                "Error example",
+                summary = "Error for get all aparments",
+                value = {
+                    "error":"There was a error"
+                },
+                status_codes = ['400']
+            )
+        ],
+        tags = ["Aparment"]
+    )
+
     def get (self,request):
         apartments = Apartment.objects.all()
         apartments_serializer = ApartmentSerializer(apartments,many = True)
-        return Response(apartments_serializer.data)
+        return Response(apartments_serializer.data,status = status.HTTP_200_OK)
     
+    @extend_schema(
+            summary = "Create an aparment",
+            description = "With this endpoint you can create an aparment",
+            responses = {201:ApartmentSerializer,400:"Bad request"},
+            examples = [OpenApiExample(
+                "Create an aparment",
+                summary = "Structure for create an aparment",
+                description = "This example show how to create an aparment",
+                value =  {
+                    "id": 13,
+                    "created_at": "2025-05-28T03:55:15.493777Z",
+                    "updated_at": "2025-05-28T03:55:15.494313Z",
+                    "title": "Seven aparment",
+                    "price": 100,
+                    "rooms": 2,
+                    "bathrooms": 0,
+                    "address": "hola",
+                    "location": "0",
+                    "square_meters": 50.75,
+                    "images": "https://www.notion",
+                    "description": "Aparment for sell"
+                }
+            ),
+            OpenApiExample(
+                "Error example",
+                summary = "Error for create an aparment",
+                value = {"error":"There was a error"},
+                status_codes = [400]
+            )],
+            tags = ["Aparment"]
+    )
+
     def post(self,request):
         serializer = ApartmentSerializer(data = request.data)
         if serializer.is_valid():
