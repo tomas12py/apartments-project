@@ -1,8 +1,9 @@
 from .serializer import ApartmentSerializer,UserRegistrationSerializer
+from app_aparments.serializer import AparmentFilteringSerializer
+from drf_spectacular.utils import extend_schema,OpenApiExample
 from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
-from drf_spectacular.utils import extend_schema,OpenApiExample
 from app_aparments.utils import validate_id
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -40,7 +41,22 @@ class AparmentMethodsById(APIView):
         apartment.delete()
         return Response({"message":"The aparment was eliminated"},status=status.HTTP_204_NO_CONTENT)
 
-    
+class AparmentFiltering(APIView):
+    def get (self,request):
+        serializer = AparmentFilteringSerializer(data = request.query_params)
+
+        if not serializer.is_valid():
+            return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+
+        filters = serializer.validated_data
+
+        query_set = Apartment.objects.all()
+        
+        if 'location' in filters:
+            query_set = query_set.filter(location = filters["location"])
+
+        serializer = ApartmentSerializer(query_set,many = True)
+        return Response(serializer.data)
     
 class AparmentGeneralMethods(APIView):
 
