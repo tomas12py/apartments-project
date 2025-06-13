@@ -6,7 +6,8 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
 from app_aparments.utils import validate_id
 from rest_framework.response import Response
-from rest_framework.views import APIView
+from .pagination import CustomPagination
+from rest_framework.views import APIView    
 from rest_framework import status
 from .models import Apartment
 
@@ -56,8 +57,19 @@ class AparmentFiltering(APIView):
             query_set = query_set.filter(location = filters["location"])
 
         serializer = ApartmentSerializer(query_set,many = True)
-        return Response(serializer.data)
-    
+        return Response(serializer.data,status=status.HTTP_200_OK)
+
+class AparmentPagination(APIView, CustomPagination):
+    def get(self,request):
+        queryset = Apartment.objects.all()
+        page = self.paginate_queryset(queryset,request,view=self)
+
+        if page is not None:
+            serializer  = ApartmentSerializer(page,many = True)
+            return self.get_paginated_response(serializer.data)
+        serializer = ApartmentSerializer(queryset,many = True)
+        return Response(serializer.data,status=status.HTTP_200_OK)
+
 class AparmentGeneralMethods(APIView):
 
     @extend_schema(
