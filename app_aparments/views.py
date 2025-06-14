@@ -1,4 +1,5 @@
 from .serializer import ApartmentSerializer,UserRegistrationSerializer
+from rest_framework.throttling import AnonRateThrottle,UserRateThrottle
 from app_aparments.serializer import AparmentFilteringSerializer
 from drf_spectacular.utils import extend_schema,OpenApiExample
 from rest_framework.permissions import IsAuthenticated
@@ -14,6 +15,7 @@ from .models import Apartment
 class AparmentMethodsById(APIView):
 
     permission_classes = [IsAuthenticated]
+    throttle_classes = [UserRateThrottle]
 
     def get(self,request,id):
         validated_id,error = validate_id(id)
@@ -60,6 +62,10 @@ class AparmentFiltering(APIView):
         return Response(serializer.data,status=status.HTTP_200_OK)
 
 class AparmentPagination(APIView, CustomPagination):
+
+    throttle_classes = [AnonRateThrottle]
+    
+
     def get(self,request):
         queryset = Apartment.objects.all()
         page = self.paginate_queryset(queryset,request,view=self)
