@@ -3,6 +3,8 @@ from rest_framework.throttling import AnonRateThrottle,UserRateThrottle
 from app_aparments.serializer import AparmentFilteringSerializer
 from drf_spectacular.utils import extend_schema,OpenApiExample
 from rest_framework.permissions import IsAuthenticated
+from django.views.decorators.cache import cache_page
+from django.utils.decorators import method_decorator
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
 from app_aparments.utils import validate_id
@@ -64,7 +66,8 @@ class AparmentFiltering(APIView):
 class AparmentPagination(APIView, CustomPagination):
 
     throttle_classes = [AnonRateThrottle]
-    
+
+    @method_decorator(cache_page(60 * 5))
 
     def get(self,request):
         queryset = Apartment.objects.all()
@@ -114,6 +117,8 @@ class AparmentGeneralMethods(APIView):
         tags = ["Aparment"]
     )
 
+    @method_decorator(cache_page(60 * 5))
+    
     def get (self,request):
         apartments = Apartment.objects.all()
         apartments_serializer = ApartmentSerializer(apartments,many = True)
