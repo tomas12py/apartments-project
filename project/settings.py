@@ -86,9 +86,9 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'project_aparments',
         'USER': 'root',
-        'PASSWORD':'1234',
-        'HOST':'localhost',
-        'PORT':'3306'
+        'PASSWORD': '1234',
+        'HOST': 'localhost',
+        'PORT': '3306'
     }
 }
 
@@ -138,13 +138,13 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
-    'DEFAULT_SCHEMA_CLASS':"drf_spectacular.openapi.AutoSchema",
+    'DEFAULT_SCHEMA_CLASS': "drf_spectacular.openapi.AutoSchema",
     'DEFAULT_THROTTLE_CLASSES': [
         'rest_framework.throttling.AnonRateThrottle',
         'rest_framework.throttling.UserRateThrottle'
     ],
     'DEFAULT_THROTTLE_RATES': {
-        'anon':'4/day',
+        'anon': '4/day',
         'user': '6/day'
     }
 }
@@ -161,9 +161,9 @@ SIMPLE_JWT = {
 }
 
 
-CACHES = {  
+CACHES = {
     'default': {
-        'BACKEND':'django_redis.cache.RedisCache',
-        'LOCATION':'redis://127.0.0.1:6379/1'
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': 'redis://127.0.0.1:6379/1'
     }
 }
