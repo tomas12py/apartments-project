@@ -22,6 +22,11 @@ class Apartment(TimeStamped):
     square_meters = models.FloatField(blank=False)
     images = models.URLField(max_length=350, blank=False)
     description = models.CharField(max_length=300, blank=False)
+    garage = models.IntegerField(blank=True,default=0)
+    elevator = models.BooleanField(blank=True)
+    pool = models.BooleanField(blank=True)
+
+
 
     class Meta():
         db_table = "apartment"
