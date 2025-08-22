@@ -1,18 +1,19 @@
 from .serializer import ApartmentSerializer, UserRegistrationSerializer
+from app_aparments.serializer import AparmentFilteringSerializer,AparmentImageSerializer
 from rest_framework.throttling import AnonRateThrottle, UserRateThrottle
-from app_aparments.serializer import AparmentFilteringSerializer
 from drf_spectacular.utils import extend_schema, OpenApiExample
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import throttle_classes
 from django.views.decorators.cache import cache_page
 from django.utils.decorators import method_decorator
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
 from app_aparments.utils import validate_id
 from rest_framework.response import Response
+from .models import Apartment, AparmentImage
 from .pagination import CustomPagination
 from rest_framework.views import APIView
 from rest_framework import status
-from .models import Apartment
 
 
 class AparmentMethodsById(APIView):
@@ -23,7 +24,7 @@ class AparmentMethodsById(APIView):
     def get(self, request, id):
         validated_id, error = validate_id(id)
         if error:
-            return error
+            return error    
         aparment = get_object_or_404(Apartment, pk=validated_id)
         serializer = ApartmentSerializer(aparment)
         return Response(serializer.data, status=status.HTTP_200_OK)
@@ -84,6 +85,8 @@ class AparmentPagination(APIView, CustomPagination):
 
 class AparmentGeneralMethods(APIView):
 
+    throttle_classes = [AnonRateThrottle]
+
     @extend_schema(
         summary="Get all aparments",
         description="Get each aparment",
@@ -119,7 +122,6 @@ class AparmentGeneralMethods(APIView):
         ],
         tags=["Aparment"]
     )
-    @method_decorator(cache_page(60 * 5))
     def get(self, request):
         apartments = Apartment.objects.all()
         apartments_serializer = ApartmentSerializer(apartments, many=True)
@@ -156,6 +158,7 @@ class AparmentGeneralMethods(APIView):
         )],
         tags=["Aparment"]
     )
+
     def post(self, request):
         serializer = ApartmentSerializer(data=request.data)
         if serializer.is_valid():
@@ -164,6 +167,16 @@ class AparmentGeneralMethods(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+class CreateImage(APIView):
+
+    def post(self,request):
+        serializer = AparmentImageSerializer(data = request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"message":"The image was created"}, status = status.HTTP_201_CREATED)
+        return Response(serializer.errors,status = status.HTTP_400_BAD_REQUEST)
+    
+    
 class UserRegister(APIView):
 
     def post(self, request):
