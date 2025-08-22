@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from .validators import is_letter_and_spaces
 from rest_framework import serializers
-from .models import Apartment
+from .models import Apartment,AparmentImage
 
 
 class ApartmentSerializer(serializers.ModelSerializer):
@@ -9,6 +9,13 @@ class ApartmentSerializer(serializers.ModelSerializer):
     class Meta():
         model = Apartment
         fields = '__all__'
+
+class AparmentImageSerializer(serializers.ModelSerializer):
+
+    class Meta():
+        model = AparmentImage
+        fields = '__all__'
+
 
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
