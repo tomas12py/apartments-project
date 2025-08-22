@@ -27,9 +27,22 @@ class Apartment(TimeStamped):
     pool = models.BooleanField(blank=True)
 
 
-
     class Meta():
         db_table = "apartment"
 
+    
+    def save(self,*args, **kwargs):
+        
+        if self.title:
+             self.title = self.title.capitalize()   
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return f" Aparment {id}"
+    
+class AparmentImage(TimeStamped):
+        aparment = models.ForeignKey(Apartment,on_delete = models.CASCADE)
+        image = models.URLField(max_length = 300)  
+
+        class Meta():
+             db_table = "apartment_image"
