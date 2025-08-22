@@ -16,17 +16,18 @@ Including another URLconf
 """
 
 from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
-from app_aparments.views import AparmentGeneralMethods, AparmentMethodsById, UserRegister, AparmentFiltering, AparmentPagination
+from app_aparments.views import AparmentGeneralMethods, AparmentMethodsById, UserRegister, AparmentFiltering, AparmentPagination,CreateImage
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from django.urls import include, path
 from django.contrib import admin
 
 
 urlpatterns = [
+    path('admin/clearcache/',include('clearcache.urls')),
     path('admin/', admin.site.urls),
-    path("aparment", AparmentGeneralMethods.as_view()),
+    path("aparment/", AparmentGeneralMethods.as_view()),
     path("aparment/<id>/", AparmentMethodsById.as_view()),
-    path("user/", UserRegister.as_view()),
+    path("user/", UserRegister.as_view()),  
     path("user/<id>/", UserRegister.as_view()),
     path("login/", TokenObtainPairView.as_view()),
     path("api/schema", SpectacularAPIView.as_view(), name='schema'),
@@ -35,5 +36,6 @@ urlpatterns = [
     path("api/schema/redoc/",
          SpectacularRedocView.as_view(url_name='schema'), name="redoc"),
     path("aparment/", AparmentFiltering.as_view()),
-    path("aparment-pagination/", AparmentPagination.as_view())
+    path("aparment-pagination/", AparmentPagination.as_view()),
+    path("apartment-image/",CreateImage.as_view())
 ]
