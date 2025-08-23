@@ -20,7 +20,6 @@ class Apartment(TimeStamped):
     address = models.CharField(max_length=100, blank=False)
     location = models.CharField(max_length=50, blank=False)
     square_meters = models.FloatField(blank=False)
-    images = models.URLField(max_length=350, blank=False)
     description = models.CharField(max_length=300, blank=False)
     garage = models.IntegerField(blank=True,default=0)
     elevator = models.BooleanField(blank=True)
@@ -41,7 +40,7 @@ class Apartment(TimeStamped):
         return f" Aparment {id}"
     
 class AparmentImage(TimeStamped):
-        aparment = models.ForeignKey(Apartment,on_delete = models.CASCADE)
+        aparment = models.ForeignKey(Apartment,related_name = 'images',on_delete = models.CASCADE)
         image = models.URLField(max_length = 300)  
 
         class Meta():
