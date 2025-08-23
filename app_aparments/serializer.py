@@ -4,17 +4,18 @@ from rest_framework import serializers
 from .models import Apartment,AparmentImage
 
 
-class ApartmentSerializer(serializers.ModelSerializer):
-
-    class Meta():
-        model = Apartment
-        fields = '__all__'
-
 class AparmentImageSerializer(serializers.ModelSerializer):
 
     class Meta():
         model = AparmentImage
         fields = '__all__'
+
+class ApartmentSerializer(serializers.ModelSerializer):
+    images = AparmentImageSerializer(many = True)
+    class Meta():
+        model = Apartment
+        fields = '__all__'
+
 
 
 
