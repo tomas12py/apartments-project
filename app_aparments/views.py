@@ -1,5 +1,5 @@
 from .serializer import ApartmentSerializer, UserRegistrationSerializer
-from app_aparments.serializer import AparmentFilteringSerializer,AparmentImageSerializer
+from app_aparments.serializer import AparmentFilteringSerializer, AparmentImageSerializer
 from rest_framework.throttling import AnonRateThrottle, UserRateThrottle
 from drf_spectacular.utils import extend_schema, OpenApiExample
 from rest_framework.permissions import IsAuthenticated
@@ -24,7 +24,7 @@ class AparmentMethodsById(APIView):
     def get(self, request, id):
         validated_id, error = validate_id(id)
         if error:
-            return error    
+            return error
         aparment = get_object_or_404(Apartment, pk=validated_id)
         serializer = ApartmentSerializer(aparment)
         return Response(serializer.data, status=status.HTTP_200_OK)
@@ -158,7 +158,6 @@ class AparmentGeneralMethods(APIView):
         )],
         tags=["Aparment"]
     )
-
     def post(self, request):
         serializer = ApartmentSerializer(data=request.data)
         if serializer.is_valid():
@@ -169,13 +168,12 @@ class AparmentGeneralMethods(APIView):
 
 class CreateImage(APIView):
 
-    def post(self,request):
-        serializer = AparmentImageSerializer(data = request.data)
+    def post(self, request):
+        serializer = AparmentImageSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response({"message":"The image was created"}, status = status.HTTP_201_CREATED)
-        return Response(serializer.errors,status = status.HTTP_400_BAD_REQUEST)
-    
+            return Response({"message": "The image was created"}, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 class UserRegister(APIView):
 
