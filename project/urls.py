@@ -37,5 +37,5 @@ urlpatterns = [
          SpectacularRedocView.as_view(url_name='schema'), name="redoc"),
     path("aparment/", AparmentFiltering.as_view()),
     path("aparment-pagination/", AparmentPagination.as_view()),
-    path("apartment-image/",CreateImage.as_view())
+    path("apartment-image/",CreateImage.as_view()),
 ]
