@@ -1,20 +1,18 @@
-from .serializer import ApartmentSerializer, UserRegistrationSerializer
-from app_aparments.serializer import AparmentFilteringSerializer, AparmentImageSerializer
+from app_aparments.api.aparment.serializer import AparmentFilteringSerializer, AparmentImageSerializer
 from rest_framework.throttling import AnonRateThrottle, UserRateThrottle
+from app_aparments.api.aparment.serializer import ApartmentSerializer
 from drf_spectacular.utils import extend_schema, OpenApiExample
+from app_aparments.models import Apartment, AparmentImage
 from rest_framework.permissions import IsAuthenticated
+from app_aparments.pagination import CustomPagination
 from rest_framework.decorators import throttle_classes
 from django.views.decorators.cache import cache_page
 from django.utils.decorators import method_decorator
 from django.shortcuts import get_object_or_404
-from django.contrib.auth.models import User
+from rest_framework.response import Response        
 from app_aparments.utils import validate_id
-from rest_framework.response import Response
-from .models import Apartment, AparmentImage
-from .pagination import CustomPagination
-from rest_framework.views import APIView
+from rest_framework.views import APIView    
 from rest_framework import status
-
 
 class AparmentMethodsById(APIView):
 
@@ -61,7 +59,7 @@ class AparmentFiltering(APIView):
         query_set = Apartment.objects.all()
 
         if 'location' in filters:
-            query_set = query_set.filter(location=filters["location"])
+            query_set = query_set.filter(location=filters["location"])      
 
         serializer = ApartmentSerializer(query_set, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
@@ -151,7 +149,7 @@ class AparmentGeneralMethods(APIView):
             }
         ),
             OpenApiExample(
-            "Error example",
+            "Error example",    
             summary="Error for create an aparment",
             value={"error": "There was a error"},
             status_codes=[400]
@@ -173,38 +171,4 @@ class CreateImage(APIView):
         if serializer.is_valid():
             serializer.save()
             return Response({"message": "The image was created"}, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
-class UserRegister(APIView):
-
-    def post(self, request):
-        serializer = UserRegistrationSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response({"message": "User has been created"}, status=status.HTTP_201_CREATED)
-
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    def get(self, request):
-        users = User.objects.all()
-        serializer = UserRegistrationSerializer(users, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
-    def put(self, request, id):
-        validated_id, error = validate_id(id)
-        if error:
-            return error
-        user = get_object_or_404(User, pk=validated_id)
-        serializer = UserRegistrationSerializer(user, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response({"message": "The user was updated"}, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    def delete(self, request, id):
-        validated_id, error = validate_id(id)
-        if error:
-            return error
-        user = get_object_or_404(User, pk=validated_id)
-        user.delete()
-        return Response({"message": "The user was eliminated"}, status=status.HTTP_204_NO_CONTENT)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)  

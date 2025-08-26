@@ -1,28 +1,11 @@
 from django.contrib.auth.models import User
-from .validators import is_letter_and_spaces
-from rest_framework import serializers
-from .models import Apartment,AparmentImage
-
-
-class AparmentImageSerializer(serializers.ModelSerializer):
-
-    class Meta():
-        model = AparmentImage
-        fields = '__all__'
-
-class ApartmentSerializer(serializers.ModelSerializer):
-    images = AparmentImageSerializer(many = True)
-    class Meta():
-        model = Apartment
-        fields = '__all__'
-
-
+from rest_framework import serializers  
 
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
     class Meta():
         model = User
-        fields = ('username', 'password')
+        fields = ('username', 'password','id')
 
     def create(self, validated_data):
         user = User(
@@ -39,8 +22,3 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
             instance.set_password(validated_data["password"])
         instance.save()
         return instance
-
-
-class AparmentFilteringSerializer(serializers.Serializer):
-    location = serializers.CharField(
-        required=False, max_length=150, validators=[is_letter_and_spaces])
