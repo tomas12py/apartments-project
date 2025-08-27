@@ -1,8 +1,8 @@
-from app_aparments.api.aparment.serializer import AparmentFilteringSerializer, AparmentImageSerializer
+from app_aparments.api.aparment.serializer import ApartmentFilteringSerializer, ApartmentImageSerializer
 from rest_framework.throttling import AnonRateThrottle, UserRateThrottle
 from app_aparments.api.aparment.serializer import ApartmentSerializer
 from drf_spectacular.utils import extend_schema, OpenApiExample
-from app_aparments.models import Apartment, AparmentImage
+from app_aparments.models import Apartment, ApartmentImage
 from rest_framework.permissions import IsAuthenticated
 from app_aparments.pagination import CustomPagination
 from rest_framework.decorators import throttle_classes
@@ -14,7 +14,7 @@ from app_aparments.utils import validate_id
 from rest_framework.views import APIView    
 from rest_framework import status
 
-class AparmentMethodsById(APIView):
+class ApartmentMethodsById(APIView):
 
     permission_classes = [IsAuthenticated]
     throttle_classes = [UserRateThrottle]
@@ -47,12 +47,12 @@ class AparmentMethodsById(APIView):
         return Response({"message": "The aparment was eliminated"}, status=status.HTTP_204_NO_CONTENT)
 
 
-class AparmentFiltering(APIView):
+class ApartmentFiltering(APIView):
 
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        serializer = AparmentFilteringSerializer(data=request.query_params)
+        serializer = ApartmentFilteringSerializer(data=request.query_params)
 
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -68,7 +68,7 @@ class AparmentFiltering(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-class AparmentPagination(APIView, CustomPagination):
+class ApartmentPagination(APIView, CustomPagination):
 
     permission_classes = [IsAuthenticated]
     throttle_classes = [AnonRateThrottle]
@@ -85,7 +85,7 @@ class AparmentPagination(APIView, CustomPagination):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-class AparmentGeneralMethods(APIView):
+class ApartmentGeneralMethods(APIView):
 
     permission_classes = [IsAuthenticated]
     throttle_classes = [AnonRateThrottle]
@@ -174,7 +174,7 @@ class CreateImage(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
-        serializer = AparmentImageSerializer(data=request.data)
+        serializer = ApartmentImageSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response({"message": "The image was created"}, status=status.HTTP_201_CREATED)
