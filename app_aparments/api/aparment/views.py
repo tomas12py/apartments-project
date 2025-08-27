@@ -48,6 +48,9 @@ class AparmentMethodsById(APIView):
 
 
 class AparmentFiltering(APIView):
+
+    permission_classes = [IsAuthenticated]
+
     def get(self, request):
         serializer = AparmentFilteringSerializer(data=request.query_params)
 
@@ -67,6 +70,7 @@ class AparmentFiltering(APIView):
 
 class AparmentPagination(APIView, CustomPagination):
 
+    permission_classes = [IsAuthenticated]
     throttle_classes = [AnonRateThrottle]
 
     @method_decorator(cache_page(60 * 5))
@@ -83,6 +87,7 @@ class AparmentPagination(APIView, CustomPagination):
 
 class AparmentGeneralMethods(APIView):
 
+    permission_classes = [IsAuthenticated]
     throttle_classes = [AnonRateThrottle]
 
     @extend_schema(
@@ -165,6 +170,8 @@ class AparmentGeneralMethods(APIView):
 
 
 class CreateImage(APIView):
+
+    permission_classes = [IsAuthenticated]
 
     def post(self, request):
         serializer = AparmentImageSerializer(data=request.data)
