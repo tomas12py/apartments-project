@@ -45,7 +45,8 @@ INSTALLED_APPS = [
     'app_aparments',
     'rest_framework',
     'drf_spectacular',
-    'clearcache'
+    'clearcache',
+    'rest_framework_simplejwt.token_blacklist'
 ]
 
 
@@ -155,11 +156,11 @@ REST_FRAMEWORK = {
 
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(hours=4),
+    'ACCESS_TOKEN_LIFETIME': timedelta(hours=2),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=50),
     'ROTATE_REFRESH_TOKENS': True,
     'SIGNING_KEY': config["SIGNATURE"],
-    'BLACKLIST_AFTER_ROTATION': True,
+    'BLACKLIST_AFTER_ROTATION': False,
     'AUTH_HEADER_TYPES': ('Bearer',),
     'AUTH_HEADER_NAME': 'HTTP_AUTHORIZATION',
 }
