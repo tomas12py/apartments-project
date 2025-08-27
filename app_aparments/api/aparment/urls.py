@@ -1,11 +1,11 @@
-from app_aparments.api.aparment.views import AparmentFiltering,AparmentPagination,AparmentGeneralMethods,AparmentMethodsById,CreateImage
+from app_aparments.api.aparment.views import ApartmentFiltering,ApartmentPagination,ApartmentGeneralMethods,ApartmentMethodsById,CreateImage
 from django.urls import path
 
 urlpatterns = [
-    path("aparment/", AparmentGeneralMethods.as_view()),
-    path("aparment/<id>/", AparmentMethodsById.as_view()),
-    path("aparment-filtering/", AparmentFiltering.as_view()), 
-    path("aparment-pagination/", AparmentPagination.as_view()),
+    path("apartment/", ApartmentGeneralMethods.as_view()),
+    path("apartment/<id>/", ApartmentMethodsById.as_view()),
+    path("apartment-filtering/", ApartmentFiltering.as_view()), 
+    path("apartment-pagination/", ApartmentPagination.as_view()),
     path("apartment-image/",CreateImage.as_view()),
 
 ]
