@@ -39,9 +39,9 @@ class Apartment(TimeStamped):
     def __str__(self):
         return f" Aparment {id}"
     
-class AparmentImage(TimeStamped):
+class ApartmentImage(TimeStamped):
         aparment = models.ForeignKey(Apartment,related_name = 'images',on_delete = models.CASCADE)
         image = models.URLField(max_length = 300)  
 
         class Meta():
-             db_table = "apartment_image"
+             db_table = "apartment_image"   
