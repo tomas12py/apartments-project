@@ -16,7 +16,7 @@ Including another URLconf
 """
 
 from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenBlacklistView
 from django.urls import include, path
 from django.contrib import admin
 
@@ -25,6 +25,8 @@ urlpatterns = [
     path('admin/clearcache/',include('clearcache.urls')),
     path('admin/', admin.site.urls),
     path("login/", TokenObtainPairView.as_view()),
+    path("refresh-token/",TokenRefreshView.as_view()),
+    path("blacklisting-token/",TokenBlacklistView.as_view()),
     path("api/",include("app_aparments.api.user.urls")),
     path("api/",include("app_aparments.api.aparment.urls")),
     path("api/schema", SpectacularAPIView.as_view(), name='schema'),    
