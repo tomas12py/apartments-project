@@ -50,6 +50,7 @@ class ApartmentMethodsById(APIView):
 class ApartmentFiltering(APIView):
 
     permission_classes = [IsAuthenticated]
+    throttle_classes = [UserRateThrottle]
 
     def get(self, request):
         serializer = ApartmentFilteringSerializer(data=request.query_params)
@@ -71,7 +72,7 @@ class ApartmentFiltering(APIView):
 class ApartmentPagination(APIView, CustomPagination):
 
     permission_classes = [IsAuthenticated]
-    throttle_classes = [AnonRateThrottle]
+    throttle_classes = [UserRateThrottle]
 
     @method_decorator(cache_page(60 * 5))
     def get(self, request):
@@ -88,7 +89,7 @@ class ApartmentPagination(APIView, CustomPagination):
 class ApartmentGeneralMethods(APIView):
 
     permission_classes = [IsAuthenticated]
-    throttle_classes = [AnonRateThrottle]
+    throttle_classes = [UserRateThrottle]
 
     @extend_schema(
         summary="Get all aparments",
@@ -172,6 +173,7 @@ class ApartmentGeneralMethods(APIView):
 class CreateImage(APIView):
 
     permission_classes = [IsAuthenticated]
+    throttle_classes = [UserRateThrottle]
 
     def post(self, request):
         serializer = ApartmentImageSerializer(data=request.data)

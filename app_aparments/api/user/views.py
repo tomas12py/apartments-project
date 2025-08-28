@@ -1,4 +1,5 @@
 from app_aparments.api.user.serializer import  UserRegistrationSerializer
+from rest_framework.throttling import AnonRateThrottle,UserRateThrottle
 from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
@@ -10,6 +11,7 @@ from rest_framework import status
 class UserRegister(APIView):
 
     permission_classes = [IsAuthenticated]
+    throttle_classes = [UserRateThrottle]
 
     def post(self, request):
         serializer = UserRegistrationSerializer(data=request.data)
