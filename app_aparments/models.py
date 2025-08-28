@@ -1,4 +1,5 @@
 from .validators import number_greater_than_zero
+from app_aparments.api.constants import STATUS_CHOICES
 from django.db import models
 
 
@@ -24,7 +25,7 @@ class Apartment(TimeStamped):
     garage = models.IntegerField(blank=True,default=0)
     elevator = models.BooleanField(blank=True)
     pool = models.BooleanField(blank=True)
-
+    state = models.CharField(max_length = 10,choices = STATUS_CHOICES, default = 'rent' )
 
     class Meta():
         db_table = "apartment"
