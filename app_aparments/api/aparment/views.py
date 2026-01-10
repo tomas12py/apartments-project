@@ -1,17 +1,21 @@
 from app_aparments.api.aparment.serializer import ApartmentFilteringSerializer, ApartmentImageSerializer
 from rest_framework.throttling import AnonRateThrottle, UserRateThrottle
 from app_aparments.api.aparment.serializer import ApartmentSerializer
+from rest_framework.permissions import IsAuthenticated,AllowAny
 from drf_spectacular.utils import extend_schema, OpenApiExample
+from django_filters.rest_framework import DjangoFilterBackend
 from app_aparments.models import Apartment, ApartmentImage
-from rest_framework.permissions import IsAuthenticated
 from app_aparments.pagination import CustomPagination
 from rest_framework.decorators import throttle_classes
 from django.views.decorators.cache import cache_page
 from django.utils.decorators import method_decorator
 from django.shortcuts import get_object_or_404
+from app_aparments.api.user import serializer
 from rest_framework.response import Response        
 from app_aparments.utils import validate_id
-from rest_framework.views import APIView    
+from rest_framework.views import APIView
+from .filters import ApartmentFiltering
+from rest_framework import viewsets
 from rest_framework import status
 
 class ApartmentMethodsById(APIView):
@@ -47,26 +51,12 @@ class ApartmentMethodsById(APIView):
         return Response({"message": "The aparment was eliminated"}, status=status.HTTP_204_NO_CONTENT)
 
 
-class ApartmentFiltering(APIView):
+class ApartmentViewsetFilter(viewsets.ReadOnlyModelViewSet):
 
-    permission_classes = [IsAuthenticated]
-    throttle_classes = [UserRateThrottle]
-
-    def get(self, request):
-        serializer = ApartmentFilteringSerializer(data=request.query_params)
-
-        if not serializer.is_valid():
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-        filters = serializer.validated_data
-
-        query_set = Apartment.objects.all()
-
-        if 'location' in filters:
-            query_set = query_set.filter(location=filters["location"])      
-
-        serializer = ApartmentSerializer(query_set, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+   queryset = Apartment.objects.all()
+   serializer_class = ApartmentSerializer
+   filter_backends = [DjangoFilterBackend]  
+   filterset_class = ApartmentFiltering
 
 
 class ApartmentPagination(APIView, CustomPagination):
