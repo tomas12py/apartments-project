@@ -25,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-=)j@l$k-k+r&#49#ibw1^6p++s=f^ql%fxkyblms+6uqc_r)1o'
+SECRET_KEY = config["SECRET_KEY"]
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -46,7 +46,12 @@ INSTALLED_APPS = [
     'rest_framework',
     'drf_spectacular',
     'clearcache',
-    'rest_framework_simplejwt.token_blacklist'
+    'rest_framework_simplejwt.token_blacklist',
+    'django_extensions',
+    'django_filters',
+    'health_check',
+    'health_check.db',
+    'health_check.cache'
 ]
 
 
@@ -58,6 +63,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware'
 ]
 
 ROOT_URLCONF = 'project.urls'
@@ -85,12 +91,12 @@ WSGI_APPLICATION = 'project.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'project_aparments',
-        'USER': 'root',
-        'PASSWORD': '1234',
-        'HOST': 'localhost',
-        'PORT': '3306'
+        'ENGINE': 'django.db.backends.mysql',   
+        'NAME': config["MYSQL_DATABASE_NAME"],  
+        'USER': config["MYSQL_DATABASE_USER"],
+        'PASSWORD': config["MYSQL_DATABASE_PASSWORD"],
+        'HOST': config['MYSQL_DATABASE_HOST'],
+        'PORT': config["MYSQL_DATABASE_PORT"]
     }
 }
 
@@ -129,7 +135,6 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = 'static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
@@ -149,8 +154,8 @@ REST_FRAMEWORK = {
         'rest_framework.throttling.UserRateThrottle'
     ],
     'DEFAULT_THROTTLE_RATES': {
-        'anon': '200/day',
-        'user': '200/day'
+        'anon': '400/day',
+        'user': '400/day'
     }
 }
 
@@ -169,6 +174,19 @@ SIMPLE_JWT = {
 CACHES = {
     'default': {
         'BACKEND': 'django_redis.cache.RedisCache',
-        'LOCATION': 'redis://127.0.0.1:6379/1'
+        'LOCATION': config["REDIS_HOST"]
+
     }
 }
+
+
+HEALTH_CHECK = {
+
+"DATABASES": ["default"],
+"CACHE": True
+
+}
+
+
+STATIC_ROOT = os.path.join(BASE_DIR,'staticfiles')
+STATIC_URL = "/static/"
