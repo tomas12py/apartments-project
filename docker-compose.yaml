@@ -12,7 +12,7 @@ services:
       DATABASE_HOST: ${MYSQL_DATABASE_HOST}
       DATABASE_USER: ${MYSQL_DATABASE_USER}
       DATABASE_PASSWORD: ${MYSQL_DATABASE_PASSWORD}
-       - REDIS_URL= ${REDIS_HOST}
+        REDIS_URL= ${REDIS_HOST} 
     depends_on:
       - mysql
       - redis
