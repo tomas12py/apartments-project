@@ -17,6 +17,9 @@ Including another URLconf
 
 from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenBlacklistView
+from app_aparments.api.healthcheck.views import Healthcheck
+from django.conf import settings
+from django.conf.urls.static import static
 from django.urls import include, path
 from django.contrib import admin
 
@@ -25,7 +28,7 @@ urlpatterns = [
     path('admin/clearcache/',include('clearcache.urls')),
     path('admin/', admin.site.urls),
     path("login/", TokenObtainPairView.as_view()),
-    path("refresh-token/",TokenRefreshView.as_view()),
+    path("refresh-token/",TokenRefreshView.as_view()),  
     path("blacklisting-token/",TokenBlacklistView.as_view()),
     path("api/",include("app_aparments.api.user.urls")),
     path("api/",include("app_aparments.api.aparment.urls")),
@@ -34,4 +37,10 @@ urlpatterns = [
          SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'), 
     path("api/schema/redoc/",
          SpectacularRedocView.as_view(url_name='schema'), name="redoc"),
+    path('api/health/',Healthcheck.as_view())
 ]
+
+if settings.DEBUG:
+    urlpatterns+= static(settings.STATIC_URL,document_root = settings.STATIC_ROOT)
+
+print(settings.STATIC_ROOT)
