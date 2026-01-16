@@ -41,7 +41,7 @@ class Apartment(TimeStamped):
         return f" Aparment {id}"
     
 class ApartmentImage(TimeStamped):
-        aparment = models.ForeignKey(Apartment,related_name = 'images',on_delete = models.CASCADE)
+        apartment = models.ForeignKey(Apartment,related_name = 'images',on_delete = models.CASCADE)
         image = models.URLField(max_length = 300)  
 
         class Meta():
