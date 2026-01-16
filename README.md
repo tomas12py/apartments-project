@@ -143,11 +143,29 @@ Using this endpoint you can know what's the application status, it verifys the d
 
 
 <img width="1503" height="451" alt="Captura de pantalla 2026-01-16 033057" src="https://github.com/user-attachments/assets/107f52cf-4f25-416a-91de-0d728c65a6db" />
+<br>
+<br>
+
+### Create an image url for apartment
+
+
+You can associate many images with one apartment and use reverse relation for the API response.
+
+
+
+<img width="1550" height="400" alt="Captura de pantalla 2026-01-16 101939" src="https://github.com/user-attachments/assets/122ae0c5-6746-4b75-bdba-363c8344e599" />
+<br>
+<br>
+<img width="1453" height="612" alt="Captura de pantalla 2026-01-16 103724" src="https://github.com/user-attachments/assets/7fe5e179-bfb8-4334-9dc1-b5087efe4612" />
+
+<br>
+<br>
 
 ### Testing
 You can testing data structures and http codes in this way.
 
-
-
 <img width="500" height="700" alt="Captura de pantalla 2026-01-16 034218" src="https://github.com/user-attachments/assets/6adf0616-d65f-4937-a928-fc083f68813f" />
+
+
+
 
