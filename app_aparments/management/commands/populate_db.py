@@ -6,7 +6,7 @@ from django.db.utils import IntegrityError
 apartment_data = [
    
      {
-    "title": "",
+    "title": "apartment of someone",
     "price": 100,
     "rooms": 2,
     "bathrooms": 0,
@@ -20,7 +20,7 @@ apartment_data = [
     "state": "rent"
   },
    {
-    "title": "second aparment",
+    "title": "apartment of someone",
     "price": 100,
     "rooms": 2,
     "bathrooms": 0,
@@ -34,7 +34,7 @@ apartment_data = [
     "state": "rent"
   },
    {
-    "title": "third aparment",
+    "title": "apartment of someone",
     "price": 100,
     "rooms": 2,
     "bathrooms": 0,
@@ -48,7 +48,7 @@ apartment_data = [
     "state": "rent"
   },
    {
-    "title": "fourth aparment",
+    "title": "apartment of someone",
     "price": 100,
     "rooms": 2,
     "bathrooms": 0,
@@ -62,7 +62,7 @@ apartment_data = [
     "state": "rent"
   },
    {
-    "title": "seven aparment",
+    "title": "apartment of someone",
     "price": 100,
     "rooms": 2,
     "bathrooms": 0,
@@ -100,7 +100,9 @@ class Command(BaseCommand):
                     state = data["state"]
                 )
 
+                apartment.full_clean()
                 apartment.save()
+
 
                 self.stdout.write(self.style.SUCCESS(f"The apartment with the id {apartment.id} and name {apartment.title} has been created"))
 
